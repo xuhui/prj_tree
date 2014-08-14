@@ -1,0 +1,94 @@
+<% content_for :header_tags do %>
+    <%= auto_discovery_link_tag(:atom, {:action => 'index', :format => 'atom', :key => User.current.rss_key}) %>
+  <%= stylesheet_link_tag('side_tree.css', :plugin => :side_tree) %>
+  <%= stylesheet_link_tag 'jquery.bonsai.css', :plugin => :side_tree %>
+  <%= javascript_include_tag 'jquery.bonsai.js', :plugin => :side_tree %>
+<% end %>
+
+<div class="contextual">
+    <%= render_project_action_links %>
+</div>
+
+<h2><%= l(:label_project_plural) %></h2>
+
+<div id="projects-index">
+
+  <%
+  # Yeah, should rework and move to controller
+    def print_project_nested_lists(projects)
+      s = ''
+      if projects.any?
+        ancestors = []
+        original_project = @project
+        projects.sort_by(&:lft).each do |project|
+          # set the project environment to please macros.
+          @project = project
+          if (ancestors.empty? || project.is_descendant_of?(ancestors.last))
+            if (ancestors.empty?)
+              s << ""
+            else
+              s << "<UL>"
+            end
+          else
+            ancestors.pop
+            s << "</li>"
+            while (ancestors.any? && !project.is_descendant_of?(ancestors.last))
+              ancestors.pop
+              s << "</ul></li>\n"
+            end
+          end
+          if ( ancestors.empty? )
+            s << "<LI>"
+          else
+            s << "<li>"
+          end
+          s << h(block_given? ? yield(project) : project.name)
+          s << ""
+          ancestors << project
+        end
+        s << ("</li>\n" * ancestors.size)
+        @project = original_project
+      end
+      # puts ">>>>>>"
+      # puts s
+      # puts "<<<<<<"
+      s.html_safe
+    end
+
+    def print_project_hierarchy(projects)
+      print_project_nested_lists(projects) do |project|
+        # link_to project, {:project_id => project, :action => 'show', :id => ''}
+        link_to project, issue_path(:project_id => project, :action => 'show', :id => '')
+      end
+    end
+  %>
+  <script>
+    jQuery(function() {
+      $('#sidetree').bonsai({uuid:"prj"});
+    });
+  </script>
+  <ol id='sidetree'>
+    <%= print_project_hierarchy Project.active %>
+  </ol>
+
+</div>
+
+<% if User.current.logged? %>
+<p style="text-align:right;">
+<span class="my-project"><%= l(:label_my_projects) %></span>
+</p>
+<% end %>
+
+<% other_formats_links do |f| %>
+  <%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= form_tag({}, :method => :get) do %>
+    <h3><%= l(:label_project_plural) %></h3>
+    <label for="closed"><%= check_box_tag 'closed', 1, params[:closed] %> <%= l(:label_show_closed_projects) %></label>
+    <p><%= submit_tag l(:button_apply), :class => 'button-small', :name => nil %></p>
+  <% end %>
+<% end %>
+
+<% html_title(l(:label_project_plural)) -%>
