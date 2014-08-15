@@ -73,7 +73,7 @@
     });
   </script>
   <ol id='sidetree'>
-    <%= print_project_hierarchy Project.active %>
+    <%= print_project_hierarchy Project.visible.order('lft').all %>
   </ol>
 
 </div>
