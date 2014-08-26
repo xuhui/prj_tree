@@ -108,12 +108,7 @@ function getCookie(c_name) {
           self.collapse(item);
         }
         else {
-          if( options.expandAll || item.hasClass('expanded') ) {
-            self.expand(item);
-          }
-          else {
-            self.collapse(item);
-          }
+          self.expand(item);
         }
 
 				// handle any deeper nested lists
@@ -146,7 +141,7 @@ function getCookie(c_name) {
 			else {
         id = listItem[0].outerText.split('\n')[0];
         id = treeid + '_' + id;
-        setCookie(id, "collapse", 100);
+        setCookie(id, "collapsed", 100);
 				this.collapse(listItem);
 			}
 		},

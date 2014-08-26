@@ -1,8 +1,8 @@
 <% content_for :header_tags do %>
-    <%= auto_discovery_link_tag(:atom, {:action => 'index', :format => 'atom', :key => User.current.rss_key}) %>
-  <%= stylesheet_link_tag('side_tree.css', :plugin => :side_tree) %>
-  <%= stylesheet_link_tag 'jquery.bonsai.css', :plugin => :side_tree %>
-  <%= javascript_include_tag 'jquery.bonsai.js', :plugin => :side_tree %>
+  <%= auto_discovery_link_tag(:atom, {:action => 'index', :format => 'atom', :key => User.current.rss_key}) %>
+  <%= stylesheet_link_tag('prj_tree.css', :plugin => :prj_tree) %>
+  <%= stylesheet_link_tag 'jquery.bonsai.css', :plugin => :prj_tree %>
+  <%= javascript_include_tag 'jquery.bonsai.js', :plugin => :prj_tree %>
 <% end %>
 
 
@@ -69,10 +69,10 @@
   %>
   <script>
     jQuery(function() {
-      $('#sidetree').bonsai({uuid:"prj"});
+      $('#prjtree').bonsai({uuid:"prj"});
     });
   </script>
-  <ol id='sidetree'>
+  <ol id='prjtree'>
     <%= print_project_hierarchy Project.visible.order('lft').all %>
   </ol>
 
