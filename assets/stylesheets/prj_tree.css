@@ -1,2 +1,5 @@
-#side_tree ul li {padding-left: 1.3em;}
-.bonsai li {font-size: 22px;}
+#prj_tree ul li {padding-left: 1.3em;}
+.bonsai li {font-size: 32px;}
+.bonsai li ul li {font-size: 28px;}
+.bonsai li ul li ul li {font-size: 24px;}
+.bonsai li ul li ul li ul li {font-size: 18px;}

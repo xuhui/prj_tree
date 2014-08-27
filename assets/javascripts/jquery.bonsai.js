@@ -146,9 +146,15 @@ function getCookie(c_name) {
 			}
 		},
 		expand: function( listItem ) {
+	        id = listItem[0].outerText.split('\n')[0];
+	        id = treeid + '_' + id;
+	        setCookie(id, "expanded", 100);
 			this.setExpanded(listItem, true);
 		},
 		collapse: function( listItem ) {
+    	    id = listItem[0].outerText.split('\n')[0];
+    	    id = treeid + '_' + id;
+    	    setCookie(id, "collapsed", 100);
 			this.setExpanded(listItem, false);
 		},
 		setExpanded: function( listItem, expanded ) {
