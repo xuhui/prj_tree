@@ -1,6 +1,7 @@
 var treeid
 
 function setCookie(c_name, value, exdays) {
+    c_name = c_name.replace(/(\r\n|\n|\r)/gm,"");
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
     var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
@@ -8,6 +9,7 @@ function setCookie(c_name, value, exdays) {
 }
 
 function getCookie(c_name) {
+    c_name = c_name.replace(/(\r\n|\n|\r)/gm,"");
     var i;
     var x;
     var y;
@@ -17,8 +19,9 @@ function getCookie(c_name) {
         y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
         x = x.replace(/^\s+|\s+$/g, "");
         if (x == c_name)
-            return unescape(y);
+     	    return unescape(y);
     }
+    return "NA"
 }
 
 
@@ -100,15 +103,22 @@ function getCookie(c_name) {
 				// collapse the nested list
         id = item[0].outerText.split('\n')[0];
         id = treeid + '_' + id;
-        status = getCookie(id);
+        var status = getCookie(id);
+
 			  if (status == 'expanded') {
+
 					self.expand(item);
         }
         else if (status == 'collapsed') {
           self.collapse(item);
         }
-        else {
-          self.expand(item);
+        else {  //EXPAND?
+          if( options.expandAll || item.hasClass('expanded') ) {
+            self.expand(item);
+          }
+          else {
+            self.collapse(item);
+          }
         }
 
 				// handle any deeper nested lists
